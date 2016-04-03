@@ -26,6 +26,7 @@ function handleDgram(chunk, rinfo) {
         fqdn: [],
         octets: null
     };
+    var machineName = hostname.fqdn[hostname.fqdn.length - 2];
 
     // read the domain name
     for (offset = 12; chunk[offset]; offset += length) {
@@ -34,9 +35,7 @@ function handleDgram(chunk, rinfo) {
         hostname.fqdn.push(chunk.slice(++offset, targetIndex).toString());
     }
 
-    var tld = hostname.fqdn[hostname.fqdn.length - 2];
-
-    hostname.machineName = tld;
+    hostname.machineName = machineName;
     hostname.fqdn = hostname.fqdn.join('.');
     hostname.octets = chunk.slice(12, offset);
 
