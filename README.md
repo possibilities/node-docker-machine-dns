@@ -1,3 +1,5 @@
+# NOTE: A fork I use with some extra features until/unless they're merged upstream
+
 # docker-machine DNS server
 
 This package fires up a tiny (~100 lines) DNS server whose sole purpose
