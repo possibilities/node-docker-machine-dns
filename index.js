@@ -34,7 +34,9 @@ function handleDgram(chunk, rinfo) {
         hostname.fqdn.push(chunk.slice(++offset, targetIndex).toString());
     }
 
-    hostname.machineName = hostname.fqdn[0];
+    var tld = hostname.fqdn[hostname.fqdn.length - 2];
+
+    hostname.machineName = tld;
     hostname.fqdn = hostname.fqdn.join('.');
     hostname.octets = chunk.slice(12, offset);
 
