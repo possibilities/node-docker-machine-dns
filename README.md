@@ -10,7 +10,15 @@ is to listen for *.docker DNS lookups and resolve the hostname using
   * Server parses out "dev.docker"
   * Server responds with the result of `$(docker-machine ip dev)`
 
-**Note:** you can change the default IP resolver from `docker-machine ip` to your own custom command by setting the `DOCKER_MACHINE_DNS_RESOLVER` environment variable.
+**Environment variables**
+
+`DOCKER_MACHINE_DNS_RESOLVER`
+
+Change the default IP resolver from `docker-machine ip` to your own custom command by setting this environment variable.
+
+`DOCKER_MACHINE_DNS_TLD`
+
+Change the default tld from `docker` by setting this environment variable.
 
 ## Setup:
 

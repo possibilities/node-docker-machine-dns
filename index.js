@@ -11,6 +11,9 @@ var s = udp.createSocket('udp4');
 s.bind(process.argv[2] || 0, function() {
     var port = s.address().port;
     console.log('Listening on UDP port', port);
+    if (process.env.DOCKER_MACHINE_DNS_TLD) {
+        console.log('TLD:', process.env.DOCKER_MACHINE_DNS_TLD);
+    }
     updateConfiguration(port);
     s.on('message', handleDgram);
 });
@@ -41,20 +44,26 @@ function handleDgram(chunk, rinfo) {
 }
 
 function updateConfiguration(port) {
+    var tld = 'docker';
+    if (process.env.DOCKER_MACHINE_DNS_TLD) {
+        tld = process.env.DOCKER_MACHINE_DNS_TLD;
+    }
+    var resolverPath = '/etc/resolver/' + tld;
+
     var fileConfig = 'nameserver\t127.0.0.1\n' +
                      'port\t' + port + '\n' +
                      'search_order\t300000\n' +
                      'timeout\t1\n';
 
     try {
-        fs.unlinkSync('/etc/resolver/docker');
+        fs.unlinkSync(resolverPath);
     } catch (e) { }
 
     try {
-        fs.writeFileSync('/etc/resolver/docker', fileConfig);
+        fs.writeFileSync(resolverPath, fileConfig);
     }
     catch (e) {
-        console.warn('Could not automatically configure resolver; make sure /etc/resolver/docker is properly set up');
+        console.warn('Could not automatically configure resolver; make sure ' + resolverPath + ' is properly set up');
     }
 }
 
